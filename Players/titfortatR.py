@@ -1,4 +1,3 @@
-import ScoreBoard
 import Game
 
 class Player():
