@@ -10,6 +10,5 @@ results = {
     (STAY_SILENT, STAY_SILENT): (1, 1)
 }
 
-
 def solve(move1, move2):
     return results[(move1, move2)]
