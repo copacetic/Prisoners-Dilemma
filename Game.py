@@ -1,13 +1,13 @@
 # valid moves
-COOPERATE = 0
-RESIST = 1
+RAT_OUT = 0
+STAY_SILENT = 1
 
 # payoff matrix
 results = {
-    (COOPERATE, COOPERATE): (3, 3),
-    (COOPERATE, RESIST): (0, 7),
-    (RESIST, COOPERATE): (7, 0),
-    (RESIST, RESIST): (1, 1)
+    (RAT_OUT, RAT_OUT): (3, 3),
+    (RAT_OUT, STAY_SILENT): (0, 7),
+    (STAY_SILENT, RAT_OUT): (7, 0),
+    (STAY_SILENT, STAY_SILENT): (1, 1)
 }
 
 

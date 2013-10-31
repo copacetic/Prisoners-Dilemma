@@ -9,7 +9,7 @@ class Player():
     def get_move(self):
         roundNum = self.scoreboard.get_round_number()
         if roundNum == 0:
-            myMove = Game.RESIST
+            myMove = Game.STAY_SILENT
         else:
             myMove = self.scoreboard.get_player_move(roundNum-1, self.ID ^ 1)
         return myMove

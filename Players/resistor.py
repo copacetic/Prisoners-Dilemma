@@ -7,4 +7,4 @@ class Player():
         self.ID = _ID
 
     def get_move(self):
-        return Game.RESIST
+        return Game.STAY_SILENT
