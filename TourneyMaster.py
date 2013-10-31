@@ -12,7 +12,7 @@ class TourneyMaster:
     """
     The TourneyMaster's job is to load the player modules and execute
     a tournament. It is not interested in the details of what a match
-    is; it leaves that to its MatchMaster to handle. 
+    is; it leaves that to its MatchMaster to handle.
     """
     def __init__(self, _tournamentType="Round Robin", _roundSystem="random"):
         self.tournamentType = _tournamentType
@@ -23,7 +23,7 @@ class TourneyMaster:
         self.roundSystem = _roundSystem
         if self.roundSystem == "random":
             self.numRounds = random.randint(RANDOM_LOWER_BOUND, RANDOM_UPPER_BOUND)
-        
+
     def load_player_modules(self, _directory=None):
         """
         Loads the names of the modules in a target directory.
@@ -47,7 +47,7 @@ class TourneyMaster:
 
     def create_matches(self):
         """
-        Functionality depends on the type of tournament specified 
+        Functionality depends on the type of tournament specified
         at initialization. For the default, round robin, this
         method will create a list of Matches which are tuples of
         player module references. For this reason, this method
@@ -60,8 +60,8 @@ class TourneyMaster:
 
     def start_tourney(self):
         """
-        Iterates over its list of Matches and initializes a MatchMaster 
-        for each one. The MatchMaster is given the player modules in a 
+        Iterates over its list of Matches and initializes a MatchMaster
+        for each one. The MatchMaster is given the player modules in a
         Match as input and takes care of executing the match. The TourneyMaster
         then takes the result and keeps a tally of the results to determine the winner.
         """
@@ -69,9 +69,20 @@ class TourneyMaster:
         for match in self.matches:
             print "Match ", matchCount, " begins!"
             matchMaster = MatchMaster.MatchMaster(match, self.directory, _numPlayers=2, _numRounds=self.numRounds)
-            matchMaster.start_match()
+            try:
+                matchMaster.start_match()
+            except:
+                print "Match between", match[0], " and ", match[1], " crashed"
+                if match[0] in self.winCount:
+                    self.winCount[match[0]] += 10000
+                else:
+                    self.winCount[match[0]] = 10000
+                if match[1] in self.winCount:
+                    self.winCount[match[1]] += 10000
+                else:
+                    self.winCount[match[1]] = 10000
             score = matchMaster.get_result()
-            outcome = zip(match, score) 
+            outcome = zip(match, score)
             index = 0
             for player_outcome in outcome: #player_outcome = ('player name', matchScore)
                 if player_outcome[0] in self.winCount:
