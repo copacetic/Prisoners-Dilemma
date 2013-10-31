@@ -44,8 +44,8 @@ class MatchMaster:
             for ipd_round in range(self.numRounds):
                 move1 = player1.get_move()  # implement scoreboard deepcopying
                 move2 = player2.get_move()
-        if Game.communication_failed(): move1 = Game.opposite_move(move1)
-        if Game.communication_failed(): move2 = Game.opposite_move(move2)
+                if Game.communication_failed(): move1 = Game.opposite_move(move1)
+                if Game.communication_failed(): move2 = Game.opposite_move(move2)
                 player1Res, player2Res = Game.solve(move1, move2)
                 print "Result of round ", ipd_round, " is: "
                 print "Player 1 score: ", player1Res
