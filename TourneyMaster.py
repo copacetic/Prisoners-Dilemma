@@ -103,4 +103,3 @@ class TourneyMaster:
         Returns the player with the lowest score.
         """
         return min(self.winCount, key=lambda k: self.winCount[k])
-
