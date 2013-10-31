@@ -12,7 +12,7 @@ class TourneyMaster:
     """
     The TourneyMaster's job is to load the player modules and execute
     a tournament. It is not interested in the details of what a match
-    is; it leaves that to its MatchMaster to handle. 
+    is; it leaves that to its MatchMaster to handle.
     """
     def __init__(self, _tournamentType="Round Robin", _roundSystem="random"):
         self.tournamentType = _tournamentType
@@ -23,7 +23,7 @@ class TourneyMaster:
         self.roundSystem = _roundSystem
         if self.roundSystem == "random":
             self.numRounds = random.randint(RANDOM_LOWER_BOUND, RANDOM_UPPER_BOUND)
-        
+
     def load_player_modules(self, _directory=None):
         """
         Loads the names of the modules in a target directory.
@@ -92,4 +92,3 @@ class TourneyMaster:
         Returns the player with the lowest score.
         """
         return min(self.winCount, key=lambda k: self.winCount[k])
-

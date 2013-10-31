@@ -7,7 +7,7 @@ import Game
 class MatchMaster:
     """
     The MatchMaster exceutes a match between two player modules.
-    The game is irrelevant to the MatchMaster. 
+    The game is irrelevant to the MatchMaster.
     Its duties include:
         1. Loading the modules and instantiating the player objects
         2. Managing the ScoreBoard, a shared object between players
@@ -21,7 +21,7 @@ class MatchMaster:
         self.playerModules = []
         self.players = []
         playerID = 0
-        
+
         self.numRounds = _numRounds
         self.scoreBoard = ScoreBoard.ScoreBoard(_numPlayers)
         sys.path.append(directory)
@@ -30,10 +30,10 @@ class MatchMaster:
             self.playerModules.append(currModule)
             self.players.append(currModule.Player(self.scoreBoard, playerID))
             playerID += 1
-        
+
         self.scores = [0]*_numPlayers
         #dict([(player:0) for player in self.players])
-        
+
     def start_match(self, matchType="IPD"):
         """
         Starts a match and returns when match is over.

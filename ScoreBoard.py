@@ -42,4 +42,3 @@ class ScoreBoard:
         Returns the Move.* done by player in round roundNum.
         """
         return (self.moves[roundNum])[player]
-
