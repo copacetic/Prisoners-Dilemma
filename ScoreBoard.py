@@ -1,7 +1,7 @@
 class ScoreBoard:
     """
-    ScoreBoard is an object meant to be shared by MatchMaster and the players.
-    It is published to by MatchMaster and subscribed to by the players.
+      ScoreBoard is an object meant to be shared by MatchMaster and the players.
+      It is published to by MatchMaster and subscribed to by the players.
     """
     def __init__(self, _numPlayers, secret):
         self.results = []
@@ -14,8 +14,8 @@ class ScoreBoard:
 
     def enter_round_data(self, secret, moves, result):
         """
-        MatchMaster's way of updating the ScoreBoard with the moves and results
-        of a new round.
+          MatchMaster's way of updating the ScoreBoard with the moves and results
+          of a new round.
         """
         if secret != self.secret or not self.valid:
             raise "Cheater!"
@@ -28,14 +28,14 @@ class ScoreBoard:
 
     def get_result(self, roundNum):
         """
-        Returns a tuple of form (punishment for p1, punishment for p2)
-        for the round denoted by roundNum.
+          Returns a tuple of form (punishment for p1, punishment for p2)
+          for the round denoted by roundNum.
         """
         return self.results[roundNum]
 
     def get_score(self):
         """
-        Returns a tuple of form (p1 score, p2 score).
+          Returns a tuple of form (p1 score, p2 score).
         """
         return tuple(self.score)
 
@@ -44,6 +44,6 @@ class ScoreBoard:
 
     def get_player_move(self, roundNum, player):
         """
-        Returns the Move.* done by player in round roundNum.
+          Returns the Move.* done by player in round roundNum.
         """
         return (self.moves[roundNum])[player]

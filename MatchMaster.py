@@ -7,17 +7,17 @@ import Game
 
 class MatchMaster:
     """
-    The MatchMaster exceutes a match between two player modules.
-    The game is irrelevant to the MatchMaster.
-    Its duties include:
-        1. Loading the modules and instantiating the player objects
-        2. Managing the ScoreBoard, a shared object between players
-        3. Asking the players for moves
-        4. Preparing results for the TourneyMaster
+      The MatchMaster exceutes a match between two player modules.
+      The game is irrelevant to the MatchMaster.
+      Its duties include:
+          1. Loading the modules and instantiating the player objects
+          2. Managing the ScoreBoard, a shared object between players
+          3. Asking the players for moves
+          4. Preparing results for the TourneyMaster
     """
     def __init__(self, moduleNames, directory, _numPlayers=2, _numRounds=None):
         """
-        Instantiates player objects and Scoreboard.
+          Instantiates player objects and Scoreboard.
         """
         self.playerModules = []
         self.players = []
@@ -38,7 +38,7 @@ class MatchMaster:
 
     def start_match(self, matchType="IPD"):
         """
-        Starts a match and returns when match is over.
+          Starts a match and returns when match is over.
         """
         if matchType == "IPD":  # IPD = Iterated Prisoner's Dilemma
             player1, player2 = self.players
@@ -59,6 +59,6 @@ class MatchMaster:
 
     def get_result(self):
         """
-        Returns a dictionary of scores from the match
+          Returns a dictionary of scores from the match
         """
         return self.scores
