@@ -5,9 +5,9 @@ STAY_SILENT = 1
 
 # payoff matrix
 results = {
-    (RAT_OUT, RAT_OUT): (3, 3),
-    (RAT_OUT, STAY_SILENT): (0, 7),
-    (STAY_SILENT, RAT_OUT): (7, 0),
+    (RAT_OUT, RAT_OUT): (2, 2),
+    (RAT_OUT, STAY_SILENT): (0, 3),
+    (STAY_SILENT, RAT_OUT): (3, 0),
     (STAY_SILENT, STAY_SILENT): (1, 1)
 }
 
