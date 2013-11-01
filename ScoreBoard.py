@@ -3,18 +3,23 @@ class ScoreBoard:
       ScoreBoard is an object meant to be shared by MatchMaster and the players.
       It is published to by MatchMaster and subscribed to by the players.
     """
-    def __init__(self, _numPlayers):
+    def __init__(self, _numPlayers, secret):
         self.results = []
         self.moves = []
         self.roundNum = 0
         self.numPlayers = _numPlayers
-        self.score = [0]*self.numPlayers
+        self.score = [0] * self.numPlayers
+        self.secret = secret
+        self.valid = True
 
-    def enter_round_data(self, moves, result):
+    def enter_round_data(self, secret, moves, result):
         """
           MatchMaster's way of updating the ScoreBoard with the moves and results
           of a new round.
         """
+        if secret != self.secret or not self.valid:
+            raise "Cheater!"
+            self.valid = False
         assert len(moves) == self.numPlayers
         assert len(result) == self.numPlayers
         self.moves.append(moves)
