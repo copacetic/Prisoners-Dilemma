@@ -13,5 +13,7 @@ tourney.create_matches()
 print "The matches are in! The matches are as follows: ", tourney.get_matches()
 tourney.start_tourney()
 winner = tourney.get_winner()
-print "The final score is: ", tourney.get_score()
+d = tourney.get_score()
+for v in sorted(d, key=d.get, reverse=False):
+  print v, d[v]
 print "...and the winner is: ", winner

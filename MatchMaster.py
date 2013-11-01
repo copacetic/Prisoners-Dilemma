@@ -1,5 +1,6 @@
 import random
 import sys
+import time
 
 import ScoreBoard
 import Game
@@ -40,18 +41,18 @@ class MatchMaster:
         """
         if matchType == "IPD": #IPD = Iterated Prisoner's Dilemma
             player1, player2 = self.players
+	    results = []
             for ipd_round in range(self.numRounds):
                 move1 = player1.get_move() #implement scoreboard deepcopying
                 move2 = player2.get_move()
 		if Game.communication_failed(): move1 = Game.opposite_move(move1)
 		if Game.communication_failed(): move2 = Game.opposite_move(move2)
                 player1Res, player2Res = Game.solve(move1, move2)
-                print "Result of round ", ipd_round, " is: "
-                print "Player 1 score: ", player1Res
-                print "Player 2 score: ", player2Res
+                results.append("(" + str(player1Res) + ", " + str(player2Res) + ")")
                 self.scores[0] += player1Res
                 self.scores[1] += player2Res
                 self.scoreBoard.enter_round_data((move1, move2), (player1Res, player2Res))
+	    print "Match results: [" + ", ".join(results) + "]"
 
 
     def get_result(self):

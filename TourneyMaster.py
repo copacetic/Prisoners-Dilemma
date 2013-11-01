@@ -5,8 +5,8 @@ import random
 import MatchMaster
 
 #bounds for number of rounds when generating randomly
-RANDOM_LOWER_BOUND=10
-RANDOM_UPPER_BOUND=20
+RANDOM_LOWER_BOUND=100
+RANDOM_UPPER_BOUND=150
 
 class TourneyMaster:
     """
@@ -67,7 +67,7 @@ class TourneyMaster:
         """
         matchCount = 1
         for match in self.matches:
-            print "Match ", matchCount, " begins!"
+            print "Match between ", match , " begins!"
             matchMaster = MatchMaster.MatchMaster(match, self.directory, _numPlayers=2, _numRounds=self.numRounds)
             matchMaster.start_match()
             score = matchMaster.get_result()
@@ -79,9 +79,9 @@ class TourneyMaster:
                 else:
                     self.winCount[player_outcome[0]] = player_outcome[1]
                 index += 1
-            print "Match ", matchCount, " has ended!"
+            print "Match between ", match, " has ended!"
             print "The score is: ", outcome
-            print "*"*70,'\n'
+            print '\n', "*"*70,'\n'
             matchCount += 1
 
     def get_score(self):
