@@ -2,12 +2,15 @@ import os
 import itertools
 import random
 import traceback
+import sys
 
 import MatchMaster
+import CheatingException
 
 #bounds for number of rounds when generating randomly
-RANDOM_LOWER_BOUND=100
-RANDOM_UPPER_BOUND=150
+RANDOM_LOWER_BOUND = 100
+RANDOM_UPPER_BOUND = 150
+
 
 class TourneyMaster:
     """
@@ -23,13 +26,14 @@ class TourneyMaster:
         self.numPlayers = None
         self.roundSystem = _roundSystem
         if self.roundSystem == "random":
-            self.numRounds = random.randint(RANDOM_LOWER_BOUND, RANDOM_UPPER_BOUND)
+            self.numRounds = random.randint(RANDOM_LOWER_BOUND,
+                                            RANDOM_UPPER_BOUND)
 
     def load_player_modules(self, _directory=None):
         """
           Loads the names of the modules in a target directory.
         """
-        assert _directory != None
+        assert _directory is not None
         self.directory = _directory
         for module in os.listdir(self.directory):
             fileExtension = module[-3:]
@@ -48,7 +52,7 @@ class TourneyMaster:
 
     def create_matches(self):
         """
-          Functionality depends on the type of tournament specified 
+          Functionality depends on the type of tournament specified
           at initialization. For the default, round robin, this
           method will create a list of Matches which are tuples of
           player module references. For this reason, this method
@@ -62,18 +66,18 @@ class TourneyMaster:
 
     def start_tourney(self):
         """
-          Iterates over its list of Matches and initializes a MatchMaster 
-          for each one. The MatchMaster is given the player modules in a 
+          Iterates over its list of Matches and initializes a MatchMaster
+          for each one. The MatchMaster is given the player modules in a
           Match as input and takes care of executing the match. The TourneyMaster
           then takes the result and keeps a tally of the results to determine the winner.
         """
         matchCount = 1
         for match in self.matches:
-            print "Match between ", match , " begins!"
+            print "Match between ", match, " begins!"
             matchMaster = MatchMaster.MatchMaster(match, self.directory, _numPlayers=2, _numRounds=self.numRounds)
             try:
                 matchMaster.start_match()
-            except Exception as e:
+            except CheatingException as e:
                 cheater = str(e)
                 print "Match between", match[0], " and ", match[1], " crashed"
                 print cheater, "cheated"
@@ -82,6 +86,25 @@ class TourneyMaster:
                     self.winCount[cheater] += 10000
                 else:
                     self.winCount[cheater] = 10000
+            except:
+                tb = sys.exc_info()[2]
+                stack = traceback.extract_tb(tb)
+                crasher = None
+                for s in stack:
+                    if s[2] == "get_move":
+                        crasher = s
+                if crasher:
+                    crasher = os.path.splitext(os.path.basename(crasher[0]))[0]
+                    print "Match between", match[0], " and ", match[1], " crashed"
+                    if crasher:
+                        print crasher, " Crashed!"
+
+                    if crasher in self.winCount:
+                        self.winCount[crasher] += 100
+                    else:
+                        self.winCount[crasher] = 100
+                else:
+                    print "Match crashed, but unable to determine crasher"
             score = matchMaster.get_result()
             outcome = zip(match, score)
             index = 0

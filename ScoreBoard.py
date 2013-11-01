@@ -1,5 +1,6 @@
 import inspect
 import os
+import CheatingException
 
 
 class ScoreBoard:
@@ -31,7 +32,7 @@ class ScoreBoard:
             self.__player_name = os.path.splitext(os.path.basename(thes[1]))[0]
 
         if not self.__valid:
-            raise Exception(self.__player_name)
+            raise CheatingException(self.__player_name)
 
         assert len(moves) == self.numPlayers
         assert len(result) == self.numPlayers
