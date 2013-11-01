@@ -42,7 +42,7 @@ class MatchMaster:
         """
         if matchType == "IPD":  # IPD = Iterated Prisoner's Dilemma
             player1, player2 = self.players
-	    results = []
+            results = []
             for ipd_round in range(self.numRounds):
                 move1 = player1.get_move()  # implement scoreboard deepcopying
                 move2 = player2.get_move()
@@ -54,7 +54,7 @@ class MatchMaster:
                 self.scores[1] += player2Res
                 self.scoreBoard.enter_round_data(self.secret, (move1, move2),
                                                  (player1Res, player2Res))
-	    print "Match results: [" + ", ".join(results) + "]"
+        print "Match results: [" + ", ".join(results) + "]"
 
 
     def get_result(self):
