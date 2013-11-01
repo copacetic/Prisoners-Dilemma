@@ -1,3 +1,7 @@
+import inspect
+import os
+
+
 class ScoreBoard:
     """
     ScoreBoard is an object meant to be shared by MatchMaster and the players.
@@ -9,17 +13,26 @@ class ScoreBoard:
         self.roundNum = 0
         self.numPlayers = _numPlayers
         self.score = [0] * self.numPlayers
-        self.secret = secret
-        self.valid = True
+        self.__secret = secret
+        self.__valid = True
 
     def enter_round_data(self, secret, moves, result):
         """
         MatchMaster's way of updating the ScoreBoard with the moves and results
         of a new round.
         """
-        if secret != self.secret or not self.valid:
-            raise "Cheater!"
-            self.valid = False
+        if secret != self.__secret:
+            self.__valid = False
+            stack = inspect.stack()
+            thes = None
+            for s in stack:
+                if s[3] == "get_move":
+                    thes = s
+            self.__player_name = os.path.splitext(os.path.basename(thes[1]))[0]
+
+        if not self.__valid:
+            raise Exception(self.__player_name)
+
         assert len(moves) == self.numPlayers
         assert len(result) == self.numPlayers
         self.moves.append(moves)

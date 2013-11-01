@@ -1,6 +1,7 @@
 import os
 import itertools
 import random
+import traceback
 
 import MatchMaster
 
@@ -57,6 +58,7 @@ class TourneyMaster:
             combinations = itertools.combinations(self.modules, 2) # A matching has size 2
             for pair in combinations:
                 self.matches.append(pair)
+            self.matches = self.matches * 1
 
     def start_tourney(self):
         """
@@ -71,16 +73,15 @@ class TourneyMaster:
             matchMaster = MatchMaster.MatchMaster(match, self.directory, _numPlayers=2, _numRounds=self.numRounds)
             try:
                 matchMaster.start_match()
-            except:
+            except Exception as e:
+                cheater = str(e)
                 print "Match between", match[0], " and ", match[1], " crashed"
-                if match[0] in self.winCount:
-                    self.winCount[match[0]] += 10000
+                print cheater, "cheated"
+
+                if cheater in self.winCount:
+                    self.winCount[cheater] += 10000
                 else:
-                    self.winCount[match[0]] = 10000
-                if match[1] in self.winCount:
-                    self.winCount[match[1]] += 10000
-                else:
-                    self.winCount[match[1]] = 10000
+                    self.winCount[cheater] = 10000
             score = matchMaster.get_result()
             outcome = zip(match, score)
             index = 0
