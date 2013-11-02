@@ -12,6 +12,12 @@ RANDOM_LOWER_BOUND = 100
 RANDOM_UPPER_BOUND = 150
 
 
+def safe_dict_increment(d, k, a):
+    if k not in d:
+        d[k] = 0
+    d[k] += a
+
+
 class TourneyMaster:
     """
       The TourneyMaster's job is to load the player modules and execute
@@ -59,56 +65,64 @@ class TourneyMaster:
           should only be called after a call to load_player_modules.
         """
         if self.tournamentType == "round robin":
-            combinations = itertools.combinations(self.modules, 2) # A matching has size 2
+            # A matching has size 2
+            combinations = itertools.combinations(self.modules, 2)
             for pair in combinations:
                 self.matches.append(pair)
             self.matches = self.matches * 1
 
+    def handle_match_crash(self, match):
+        tb = sys.exc_info()[2]
+        stack = traceback.extract_tb(tb)
+        crasher = None
+        for s in stack:
+            if s[2] == "get_move":
+                crasher = s
+        if crasher:
+            crasher = os.path.splitext(os.path.basename(crasher[0]))[0]
+            print "Match between", match[0], " and ",
+            print match[1], " crashed"
+            if crasher:
+                print crasher, " Crashed!"
+
+            safe_dict_increment(self.winCount, crasher, 1000)
+        else:
+            print "Match crashed, but unable to determine crasher"
+
+    def run_match(self, match):
+        matchMaster = MatchMaster.MatchMaster(match, self.directory,
+                                              _numPlayers=2,
+                                              _numRounds=self.numRounds)
+        try:
+            matchMaster.start_match()
+        except CheatingException as e:
+            cheater = str(e)
+            print "Match between", match[0], " and ", match[1], " crashed"
+            print cheater, "cheated"
+
+            safe_dict_increment(self.winCount, cheater, 10000)
+        except:
+            self.handle_match_crash(match)
+
+        return matchMaster
+
     def start_tourney(self):
         """
-          Iterates over its list of Matches and initializes a MatchMaster
-          for each one. The MatchMaster is given the player modules in a
-          Match as input and takes care of executing the match. The TourneyMaster
-          then takes the result and keeps a tally of the results to determine the winner.
+          Iterates over its list of Matches and initializes a MatchMaster for
+          each one. The MatchMaster is given the player modules in a match as
+          input and takes care of executing the match. The TourneyMaster then
+          takes the result and keeps a tally of the results to determine the
+          winner.
         """
         matchCount = 1
         for match in self.matches:
             print "Match between ", match, " begins!"
-            matchMaster = MatchMaster.MatchMaster(match, self.directory, _numPlayers=2, _numRounds=self.numRounds)
-            try:
-                matchMaster.start_match()
-            except CheatingException as e:
-                cheater = str(e)
-                print "Match between", match[0], " and ", match[1], " crashed"
-                print cheater, "cheated"
-
-                if cheater in self.winCount:
-                    self.winCount[cheater] += 10000
-                else:
-                    self.winCount[cheater] = 10000
-            except:
-                tb = sys.exc_info()[2]
-                stack = traceback.extract_tb(tb)
-                crasher = None
-                for s in stack:
-                    if s[2] == "get_move":
-                        crasher = s
-                if crasher:
-                    crasher = os.path.splitext(os.path.basename(crasher[0]))[0]
-                    print "Match between", match[0], " and ", match[1], " crashed"
-                    if crasher:
-                        print crasher, " Crashed!"
-
-                    if crasher in self.winCount:
-                        self.winCount[crasher] += 100
-                    else:
-                        self.winCount[crasher] = 100
-                else:
-                    print "Match crashed, but unable to determine crasher"
+            matchMaster = self.run_match(match)
             score = matchMaster.get_result()
             outcome = zip(match, score)
             index = 0
-            for player_outcome in outcome: #player_outcome = ('player name', matchScore)
+            # player_outcome = ('player name', matchScore)
+            for player_outcome in outcome:
                 if player_outcome[0] in self.winCount:
                     self.winCount[player_outcome[0]] += player_outcome[1]
                 else:
@@ -116,7 +130,7 @@ class TourneyMaster:
                 index += 1
             print "Match between ", match, " has ended!"
             print "The score is: ", outcome
-            print '\n', "*"*70,'\n'
+            print '\n', "*" * 70, '\n'
             matchCount += 1
 
     def get_score(self):
