@@ -1,6 +1,6 @@
 import inspect
 import os
-import CheatingException
+from CheatingException import CheatingException
 
 
 class ScoreBoard:

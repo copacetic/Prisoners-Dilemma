@@ -7,6 +7,5 @@ class Player():
         self.ID = _ID
 
     def get_move(self):
-        Butts()
         self.scoreboard.enter_round_data(0.134, None, None)
         return Game.RAT_OUT

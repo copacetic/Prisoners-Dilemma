@@ -5,7 +5,7 @@ import traceback
 import sys
 
 import MatchMaster
-import CheatingException
+from CheatingException import CheatingException
 
 #bounds for number of rounds when generating randomly
 RANDOM_LOWER_BOUND = 100
@@ -101,7 +101,7 @@ class TourneyMaster:
             print cheater, "cheated"
 
             safe_dict_increment(self.winCount, cheater, 10000)
-        except:
+        except Exception as e:
             self.handle_match_crash(match)
 
         return matchMaster
